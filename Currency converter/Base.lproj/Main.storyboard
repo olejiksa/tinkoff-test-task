@@ -1,7 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="13122.16" systemVersion="17A277" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="BYZ-38-t0r">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="13771" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="BYZ-38-t0r">
+    <device id="retina4_7" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13104.12"/>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13772"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -9,13 +13,54 @@
         <!--View Controller-->
         <scene sceneID="tne-QT-ifu">
             <objects>
-                <viewController id="BYZ-38-t0r" customClass="ViewController" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="BYZ-38-t0r" customClass="ViewController" customModule="Currency_converter" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="8bC-Xf-vdC">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="dAH-D1-qnx">
+                                <rect key="frame" x="10" y="323" width="355" height="21"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="21" id="Axi-NY-vf2"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <pickerView contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="F0x-2D-vmr">
+                                <rect key="frame" x="0.0" y="20" width="375" height="293"/>
+                            </pickerView>
+                            <pickerView contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="iE9-2Y-21d">
+                                <rect key="frame" x="0.0" y="354" width="375" height="313"/>
+                            </pickerView>
+                            <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" style="gray" translatesAutoresizingMaskIntoConstraints="NO" id="Sj2-0M-hLY">
+                                <rect key="frame" x="177" y="323.5" width="20" height="20"/>
+                            </activityIndicatorView>
+                        </subviews>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <constraints>
+                            <constraint firstItem="F0x-2D-vmr" firstAttribute="trailing" secondItem="6Tk-OE-BBY" secondAttribute="trailing" id="08w-fF-pL9"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="iE9-2Y-21d" secondAttribute="bottom" id="ALd-ch-B1w"/>
+                            <constraint firstItem="Sj2-0M-hLY" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="GkZ-Gq-FFC"/>
+                            <constraint firstItem="dAH-D1-qnx" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="10" id="LfS-Jl-Qg5"/>
+                            <constraint firstItem="dAH-D1-qnx" firstAttribute="top" secondItem="F0x-2D-vmr" secondAttribute="bottom" constant="10" id="OHN-No-T9I"/>
+                            <constraint firstItem="iE9-2Y-21d" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" id="Pp5-K8-e1H"/>
+                            <constraint firstItem="F0x-2D-vmr" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" id="SJ9-dm-72y"/>
+                            <constraint firstItem="Sj2-0M-hLY" firstAttribute="centerY" secondItem="8bC-Xf-vdC" secondAttribute="centerY" id="U6T-U1-8aJ"/>
+                            <constraint firstItem="iE9-2Y-21d" firstAttribute="trailing" secondItem="6Tk-OE-BBY" secondAttribute="trailing" id="a8H-rk-Kdb"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="dAH-D1-qnx" secondAttribute="trailing" constant="10" id="b6F-kc-SZf"/>
+                            <constraint firstItem="F0x-2D-vmr" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" id="d2k-e8-Qqs"/>
+                            <constraint firstItem="dAH-D1-qnx" firstAttribute="centerY" secondItem="8bC-Xf-vdC" secondAttribute="centerY" id="jfR-Wg-kKM"/>
+                            <constraint firstItem="iE9-2Y-21d" firstAttribute="top" secondItem="dAH-D1-qnx" secondAttribute="bottom" constant="10" id="pCy-ry-rfs"/>
+                        </constraints>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                     </view>
+                    <connections>
+                        <outlet property="activityIndicator" destination="Sj2-0M-hLY" id="0kC-ST-0Vw"/>
+                        <outlet property="label" destination="dAH-D1-qnx" id="rBq-nx-BoS"/>
+                        <outlet property="pickerFrom" destination="F0x-2D-vmr" id="JpA-qJ-AU3"/>
+                        <outlet property="pickerTo" destination="iE9-2Y-21d" id="Wuo-jQ-Kan"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
