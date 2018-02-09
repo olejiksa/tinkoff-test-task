@@ -116,6 +116,7 @@ class ViewController: UIViewController, UIPickerViewDataSource, UIPickerViewDele
     
     //MARK: - Extra features
     
+    /// Refreshes currency list manually.
     @IBAction func refresh(_ sender: UIBarButtonItem) {
         NetworkService.shared.requestCurrentCurrencyRate(.getAllCurrencies) { [weak self] (update: NetworkService.Update) in
             if let strongSelf = self {
