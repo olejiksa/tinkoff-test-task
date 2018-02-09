@@ -12,6 +12,7 @@
 		EBCD3579202CD77E00C0D20A /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = EBCD3577202CD77E00C0D20A /* Main.storyboard */; };
 		EBCD357B202CD77E00C0D20A /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = EBCD357A202CD77E00C0D20A /* Assets.xcassets */; };
 		EBCD357E202CD77E00C0D20A /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = EBCD357C202CD77E00C0D20A /* LaunchScreen.storyboard */; };
+		EBCD358D202DC61600C0D20A /* NetworkService.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBCD358C202DC61600C0D20A /* NetworkService.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -22,6 +23,7 @@
 		EBCD357A202CD77E00C0D20A /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		EBCD357D202CD77E00C0D20A /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		EBCD357F202CD77E00C0D20A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		EBCD358C202DC61600C0D20A /* NetworkService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkService.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -60,8 +62,17 @@
 				EBCD357A202CD77E00C0D20A /* Assets.xcassets */,
 				EBCD357C202CD77E00C0D20A /* LaunchScreen.storyboard */,
 				EBCD357F202CD77E00C0D20A /* Info.plist */,
+				EBCD358E202DC61E00C0D20A /* Services */,
 			);
 			path = "Currency converter";
+			sourceTree = "<group>";
+		};
+		EBCD358E202DC61E00C0D20A /* Services */ = {
+			isa = PBXGroup;
+			children = (
+				EBCD358C202DC61600C0D20A /* NetworkService.swift */,
+			);
+			path = Services;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -137,6 +148,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				EBCD3576202CD77E00C0D20A /* ViewController.swift in Sources */,
+				EBCD358D202DC61600C0D20A /* NetworkService.swift in Sources */,
 				EBCD3574202CD77E00C0D20A /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
