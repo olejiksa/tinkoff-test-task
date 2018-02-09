@@ -11,27 +11,14 @@ import Foundation
 class NetworkService {
     
     var allCurrencies: [String] = []
+    
+    /// Relates to selected currencies:
+    /// keeps the currency "from" and the currency "to" strings.
     var selectedCurrencies = (baseCurrency: "", toCurrency: "")
     
     static let shared = NetworkService()
-    private init() { }
     
-    private func requestCurrencyRates(baseCurrency: String?, parseHandler: @escaping (Data?, Error?) -> Void) {
-        let url: URL
-        
-        if let currency = baseCurrency {
-            url = URL(string: "https://api.fixer.io/latest?base=" + currency)!
-        } else {
-            url = URL(string: "https://api.fixer.io/latest")!
-        }
-        
-        let dataTask = URLSession.shared.dataTask(with: url) {
-            (dataReceived, response, error) in
-            parseHandler(dataReceived, error)
-        }
-        
-        dataTask.resume()
-    }
+    private init() { }
     
     func requestCurrentCurrencyRate(_ mode: ConverterMode, completion: @escaping ((_ update: Update) -> Void)) {
         completion(.activityIndicator(true))
@@ -53,9 +40,7 @@ class NetworkService {
                             strongSelf.allCurrencies = array
                             completion(.pickers)
                             completion(.activityIndicator(false))
-                            if strongSelf.allCurrencies.count > 1 {
-                                strongSelf.requestCurrentCurrencyRate(.exchangeCurrencies(strongSelf.allCurrencies[0], strongSelf.allCurrencies[1]), completion: completion)
-                            }
+                            strongSelf.requestCurrentCurrencyRate(.exchangeCurrencies(strongSelf.allCurrencies[0], strongSelf.allCurrencies[1]), completion: completion)
                         }
                     }
                 })
@@ -72,6 +57,23 @@ class NetworkService {
                 })
             }
         }
+    }
+    
+    private func requestCurrencyRates(baseCurrency: String?, parseHandler: @escaping (Data?, Error?) -> Void) {
+        let url: URL
+        
+        if let currency = baseCurrency {
+            url = URL(string: "https://api.fixer.io/latest?base=" + currency)!
+        } else {
+            url = URL(string: "https://api.fixer.io/latest")!
+        }
+        
+        let dataTask = URLSession.shared.dataTask(with: url) {
+            (dataReceived, response, error) in
+            parseHandler(dataReceived, error)
+        }
+        
+        dataTask.resume()
     }
     
     private func parseCurrencyRatesResponse(data: Data?, toCurrency: String?) -> Response {
@@ -93,6 +95,7 @@ class NetworkService {
                     }
                     else {
                         var keysArray = Array(rates.keys)
+                        // This line was added for EUR currency support
                         keysArray += [parsedJSON["base"] as! String]
                         return .currencies(keysArray.sorted())
                     }
@@ -132,6 +135,8 @@ class NetworkService {
     
     //MARK: - Enums
     
+    /// Used to update the view from the model
+    /// by completion handlers.
     enum Update {
         case activityIndicator(Bool)
         case pickers
@@ -142,6 +147,9 @@ class NetworkService {
         case getAllCurrencies, exchangeCurrencies(String, String)
     }
     
+    /// Used to select the response
+    /// based on the request: get message text
+    /// or list of all currencies.
     private enum Response {
         case message(String), currencies([String])
     }
