@@ -10,8 +10,11 @@ import Foundation
 
 class NetworkService {
     
-    var currencies: [String] = []
+    var allCurrencies: [String] = []
     var selectedCurrencies = (baseCurrency: "", toCurrency: "")
+    
+    static let shared = NetworkService()
+    private init() { }
     
     private func requestCurrencyRates(baseCurrency: String?, parseHandler: @escaping (Data?, Error?) -> Void) {
         let url: URL
@@ -36,7 +39,7 @@ class NetworkService {
         
         switch mode {
         case .getAllCurrencies:
-            currencies = []
+            allCurrencies = []
             completion(.pickers)
             
             self.retrieveCurrencyRate(baseCurrency: nil, toCurrency: nil) { [weak self] (value) in
@@ -47,11 +50,11 @@ class NetworkService {
                             completion(.label(text))
                             completion(.activityIndicator(false))
                         case let .currencies(array):
-                            strongSelf.currencies = array
+                            strongSelf.allCurrencies = array
                             completion(.pickers)
                             completion(.activityIndicator(false))
-                            if strongSelf.currencies.count > 1 {
-                                strongSelf.requestCurrentCurrencyRate(.exchangeCurrencies(strongSelf.currencies[0], strongSelf.currencies[1]), completion: completion)
+                            if strongSelf.allCurrencies.count > 1 {
+                                strongSelf.requestCurrentCurrencyRate(.exchangeCurrencies(strongSelf.allCurrencies[0], strongSelf.allCurrencies[1]), completion: completion)
                             }
                         }
                     }
@@ -129,18 +132,18 @@ class NetworkService {
     
     //MARK: - Enums
     
+    enum Update {
+        case activityIndicator(Bool)
+        case pickers
+        case label(String)
+    }
+    
     enum ConverterMode {
         case getAllCurrencies, exchangeCurrencies(String, String)
     }
     
     private enum Response {
         case message(String), currencies([String])
-    }
-    
-    enum Update {
-        case activityIndicator(Bool)
-        case pickers
-        case label(String)
     }
     
 }

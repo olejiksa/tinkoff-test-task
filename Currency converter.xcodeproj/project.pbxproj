@@ -56,13 +56,12 @@
 		EBCD3572202CD77E00C0D20A /* Currency converter */ = {
 			isa = PBXGroup;
 			children = (
-				EBCD3573202CD77E00C0D20A /* AppDelegate.swift */,
-				EBCD3575202CD77E00C0D20A /* ViewController.swift */,
-				EBCD3577202CD77E00C0D20A /* Main.storyboard */,
-				EBCD357A202CD77E00C0D20A /* Assets.xcassets */,
-				EBCD357C202CD77E00C0D20A /* LaunchScreen.storyboard */,
-				EBCD357F202CD77E00C0D20A /* Info.plist */,
+				EBD6BD8D202E021A00AAF594 /* Controllers */,
 				EBCD358E202DC61E00C0D20A /* Services */,
+				EBD6BD8E202E022D00AAF594 /* Views */,
+				EBCD3573202CD77E00C0D20A /* AppDelegate.swift */,
+				EBCD357A202CD77E00C0D20A /* Assets.xcassets */,
+				EBCD357F202CD77E00C0D20A /* Info.plist */,
 			);
 			path = "Currency converter";
 			sourceTree = "<group>";
@@ -73,6 +72,23 @@
 				EBCD358C202DC61600C0D20A /* NetworkService.swift */,
 			);
 			path = Services;
+			sourceTree = "<group>";
+		};
+		EBD6BD8D202E021A00AAF594 /* Controllers */ = {
+			isa = PBXGroup;
+			children = (
+				EBCD3575202CD77E00C0D20A /* ViewController.swift */,
+			);
+			path = Controllers;
+			sourceTree = "<group>";
+		};
+		EBD6BD8E202E022D00AAF594 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				EBCD3577202CD77E00C0D20A /* Main.storyboard */,
+				EBCD357C202CD77E00C0D20A /* LaunchScreen.storyboard */,
+			);
+			path = Views;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */

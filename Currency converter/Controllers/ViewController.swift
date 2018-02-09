@@ -17,8 +17,6 @@ class ViewController: UIViewController, UIPickerViewDataSource, UIPickerViewDele
     
     @IBOutlet weak var activityIndicator: UIActivityIndicatorView!
     
-    var apiService = NetworkService()
-    
     //MARK: - UIViewController
     
     override func viewDidLoad() {
@@ -32,7 +30,7 @@ class ViewController: UIViewController, UIPickerViewDataSource, UIPickerViewDele
         
         self.activityIndicator.hidesWhenStopped = true
         
-        apiService.requestCurrentCurrencyRate(.getAllCurrencies) { [weak self] (update: NetworkService.Update) in
+        NetworkService.shared.requestCurrentCurrencyRate(.getAllCurrencies) { [weak self] (update: NetworkService.Update) in
             if let strongSelf = self {
                 strongSelf.updateView(update)
             }
@@ -62,7 +60,7 @@ class ViewController: UIViewController, UIPickerViewDataSource, UIPickerViewDele
     //MARK: - UIPickerView
     
     func currenciesExceptBase() -> [String] {
-        var currenciesExceptBase = apiService.currencies
+        var currenciesExceptBase = NetworkService.shared.allCurrencies
         currenciesExceptBase.remove(at: pickerFrom.selectedRow(inComponent: 0))
         
         return currenciesExceptBase
@@ -72,10 +70,10 @@ class ViewController: UIViewController, UIPickerViewDataSource, UIPickerViewDele
         let baseCurrencyIndex = self.pickerFrom.selectedRow(inComponent: 0)
         let toCurrencyIndex = self.pickerTo.selectedRow(inComponent: 0)
         
-        let baseCurrency = apiService.currencies[baseCurrencyIndex]
+        let baseCurrency = NetworkService.shared.allCurrencies[baseCurrencyIndex]
         let toCurrency = self.currenciesExceptBase()[toCurrencyIndex]
         
-        apiService.selectedCurrencies = (baseCurrency, toCurrency)
+        NetworkService.shared.selectedCurrencies = (baseCurrency, toCurrency)
         
         return (baseCurrency, toCurrency)
     }
@@ -87,21 +85,21 @@ class ViewController: UIViewController, UIPickerViewDataSource, UIPickerViewDele
     }
 
     func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
-        if !apiService.currencies.isEmpty && pickerView === pickerTo {
+        if !NetworkService.shared.allCurrencies.isEmpty && pickerView === pickerTo {
             return self.currenciesExceptBase().count
         }
         
-        return apiService.currencies.count
+        return NetworkService.shared.allCurrencies.count
     }
     
     //MARK: - UIPickerViewDelegate
 
     func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
-        if !apiService.currencies.isEmpty && pickerView === pickerTo {
+        if !NetworkService.shared.allCurrencies.isEmpty && pickerView === pickerTo {
             return self.currenciesExceptBase()[row]
         }
         
-        return apiService.currencies[row]
+        return NetworkService.shared.allCurrencies[row]
     }
     
     func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
@@ -109,7 +107,7 @@ class ViewController: UIViewController, UIPickerViewDataSource, UIPickerViewDele
             self.pickerTo.reloadAllComponents()
         }
         
-        apiService.requestCurrentCurrencyRate(.exchangeCurrencies(selectedCurrencies().0, selectedCurrencies().1)) { [weak self] (update: NetworkService.Update) in
+        NetworkService.shared.requestCurrentCurrencyRate(.exchangeCurrencies(selectedCurrencies().0, selectedCurrencies().1)) { [weak self] (update: NetworkService.Update) in
             if let strongSelf = self {
                 strongSelf.updateView(update)
             }
@@ -119,7 +117,7 @@ class ViewController: UIViewController, UIPickerViewDataSource, UIPickerViewDele
     //MARK: - Extra features
     
     @IBAction func refresh(_ sender: UIBarButtonItem) {
-        apiService.requestCurrentCurrencyRate(.getAllCurrencies) { [weak self] (update: NetworkService.Update) in
+        NetworkService.shared.requestCurrentCurrencyRate(.getAllCurrencies) { [weak self] (update: NetworkService.Update) in
             if let strongSelf = self {
                 strongSelf.updateView(update)
             }
