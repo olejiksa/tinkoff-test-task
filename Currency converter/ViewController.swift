@@ -121,9 +121,9 @@ class ViewController: UIViewController, UIPickerViewDataSource, UIPickerViewDele
                             strongSelf.currencies = value as! [String]
                             strongSelf.pickerFrom.reloadAllComponents()
                             strongSelf.pickerTo.reloadAllComponents()
-                            strongSelf.requestCurrentCurrencyRateToExchange()
                             
                             strongSelf.activityIndicator.stopAnimating()
+                            strongSelf.requestCurrentCurrencyRateToExchange()
                         }
                     }
                 })
