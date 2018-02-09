@@ -56,7 +56,7 @@ class ViewController: UIViewController, UIPickerViewDataSource, UIPickerViewDele
     }
 
     func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
-        if currencies.count > 0 && pickerView === pickerTo {
+        if !currencies.isEmpty && pickerView === pickerTo {
             return self.currenciesExceptBase().count
         }
         
@@ -66,7 +66,7 @@ class ViewController: UIViewController, UIPickerViewDataSource, UIPickerViewDele
     //MARK: - UIPickerViewDelegate
 
     func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
-        if currencies.count > 0 && pickerView === pickerTo {
+        if !currencies.isEmpty && pickerView === pickerTo {
             return self.currenciesExceptBase()[row]
         }
         
@@ -100,7 +100,7 @@ class ViewController: UIViewController, UIPickerViewDataSource, UIPickerViewDele
         dataTask.resume()
     }
     
-    func requestCurrentCurrencyRate(_ mode: ConverterModes) {
+    func requestCurrentCurrencyRate(_ mode: ConverterMode) {
         self.activityIndicator.startAnimating()
         self.label.text = ""
         
@@ -113,12 +113,13 @@ class ViewController: UIViewController, UIPickerViewDataSource, UIPickerViewDele
             self.retrieveCurrencyRate(baseCurrency: nil, toCurrency: nil) { [weak self] (value) in
                 DispatchQueue.main.async(execute: {
                     if let strongSelf = self {
-                        if value is String {
-                            strongSelf.label.text = value as? String
+                        switch value {
+                        case let .message(text):
+                            strongSelf.label.text = text
                             
                             strongSelf.activityIndicator.stopAnimating()
-                        } else {
-                            strongSelf.currencies = value as! [String]
+                        case let .currencies(array):
+                            strongSelf.currencies = array
                             strongSelf.pickerFrom.reloadAllComponents()
                             strongSelf.pickerTo.reloadAllComponents()
                             
@@ -132,8 +133,10 @@ class ViewController: UIViewController, UIPickerViewDataSource, UIPickerViewDele
             self.retrieveCurrencyRate(baseCurrency: baseCurrency, toCurrency: toCurrency) { [weak self] (value) in
                 DispatchQueue.main.async(execute: {
                     if let strongSelf = self {
-                        strongSelf.label.text = value as? String
-                        strongSelf.activityIndicator.stopAnimating()
+                        if case .message(let text) = value {
+                            strongSelf.label.text = text
+                            strongSelf.activityIndicator.stopAnimating()
+                        }
                     }
                 })
             }
@@ -150,7 +153,7 @@ class ViewController: UIViewController, UIPickerViewDataSource, UIPickerViewDele
         self.requestCurrentCurrencyRate(.exchangeCurrencies(baseCurrency, toCurrency))
     }
     
-    func parseCurrencyRatesResponse(data: Data?, toCurrency: String?) -> Any {
+    func parseCurrencyRatesResponse(data: Data?, toCurrency: String?) -> ConverterResponse {
         var value = ""
         
         do {
@@ -158,6 +161,7 @@ class ViewController: UIViewController, UIPickerViewDataSource, UIPickerViewDele
             
             if let parsedJSON = json {
                 print("\(parsedJSON)")
+                
                 if let rates = parsedJSON["rates"] as? Dictionary<String, Double> {
                     if let currency = toCurrency {
                         if let rate = rates[currency] {
@@ -167,7 +171,9 @@ class ViewController: UIViewController, UIPickerViewDataSource, UIPickerViewDele
                         }
                     }
                     else {
-                        return Array(rates.keys.sorted())
+                        var keysArray = Array(rates.keys)
+                        keysArray += [parsedJSON["base"] as! String]
+                        return .currencies(keysArray.sorted())
                     }
                 } else {
                     value = "No \"rates\" field found"
@@ -179,35 +185,46 @@ class ViewController: UIViewController, UIPickerViewDataSource, UIPickerViewDele
             value = error.localizedDescription
         }
         
-        return value
+        return .message(value)
     }
     
-    func retrieveCurrencyRate(baseCurrency: String?, toCurrency: String?, completion: @escaping (Any) -> Void) {
+    func retrieveCurrencyRate(baseCurrency: String?, toCurrency: String?, completion: @escaping (ConverterResponse) -> Void) {
         self.requestCurrencyRates(baseCurrency: baseCurrency) { [weak self] (data, error) in
-            var string = "No currency retrieved!"
+            var response = ConverterResponse.message("No currency retrieved!")
             
             if let currentError = error {
-                string = currentError.localizedDescription
+                response = .message(currentError.localizedDescription)
             } else {
                 if let strongSelf = self {
                     if let currency = toCurrency {
-                        string = strongSelf.parseCurrencyRatesResponse(data: data, toCurrency: currency) as! String
+                        response = strongSelf.parseCurrencyRatesResponse(data: data, toCurrency: currency)
                     } else {
-                        completion(strongSelf.parseCurrencyRatesResponse(data: data, toCurrency: nil) as! [String])
+                        completion(strongSelf.parseCurrencyRatesResponse(data: data, toCurrency: nil))
                         return
                     }
                 }
             }
             
-            completion(string)
+            completion(response)
         }
     }
     
     //MARK: - Enums
     
-    enum ConverterModes {
+    enum ConverterMode {
         case getAllCurrencies
         case exchangeCurrencies(String, String)
+    }
+    
+    enum ConverterResponse {
+        case message(String)
+        case currencies([String])
+    }
+    
+    //MARK: - Extra features
+    
+    @IBAction func refresh(_ sender: UIBarButtonItem) {
+        self.requestCurrentCurrencyRate(.getAllCurrencies)
     }
 
 }
